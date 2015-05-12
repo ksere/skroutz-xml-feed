@@ -67,9 +67,6 @@ class skroutz extends framework {
 		$this->©diagnostic->forceDBLog( 'product', array(), '<strong>Skroutz XML generation started at ' . date( 'd M, Y H:i:s' ) . '</strong>' );
 
 		$prodInXml = $this->processProducts();
-//		if ( ! $this->©xml->parseArray( $productsArray ) ) {
-//			$this->©notice->enqueue( 'There was an error generating XML for skroutz.gr at ' . $this->©env->time_details() . '. Please check your settings.' );
-//		}
 
 		$this->©diagnostic->forceDBLog( 'product', array(), '<strong>Skroutz XML generation finished at ' . date( 'd M, Y H:i:s' ) . '</strong><br>Time taken: ' . round( microtime( true ) - $sTime, 2 ) . ' sec<br>Mem details: ' . $this->©env->memory_details() );
 
@@ -751,21 +748,6 @@ class skroutz extends framework {
 		}
 
 		return implode( ' - ', array_unique( $out ) );
-	}
-
-	/**
-	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
-	 */
-	public function debug() {
-		echo "<strong>not real mem usage: </strong>" . ( memory_get_peak_usage( false ) / 1024 / 1024 ) . " MiB<br>";
-		echo "<strong>real mem usage: </strong>" . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . " MiB<br>";
-		$sTime     = microtime( true );
-		$prodArray = $this->createProductsArray();
-//		$this->©xml->parseArray( $prodArray );
-		echo "<strong>time: </strong>" . ( microtime( true ) - $sTime ) . " sec<br><br>";
-		var_dump( $prodArray );
-		die;
 	}
 
 	/**

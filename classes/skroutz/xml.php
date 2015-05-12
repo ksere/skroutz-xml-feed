@@ -116,9 +116,6 @@ class xml extends \xd_v141226_dev\xml {
 			$this->initSimpleXML();
 		}
 
-		// get products node
-		$products = $this->simpleXML->children();
-
 		// parse array
 		foreach ( $array as $k => $v ) {
 			$this->appendProduct( $v );
@@ -168,7 +165,8 @@ class xml extends \xd_v141226_dev\xml {
 	 */
 	protected function initSimpleXML() {
 		$this->fileLocation = $this->getFileLocation();
-		$this->simpleXML    = new \SimpleXMLExtended( '<?xml version="1.0" encoding="UTF-8"?><' . $this->rootElemName . '></' . $this->rootElemName . '>' );
+
+		$this->simpleXML = new \SimpleXMLExtended( '<?xml version="1.0" encoding="UTF-8"?><' . $this->rootElemName . '></' . $this->rootElemName . '>' );
 		$this->simpleXML->addChild( $this->productsElemWrapper );
 
 		return $this;
