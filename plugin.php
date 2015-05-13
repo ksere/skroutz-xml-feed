@@ -44,7 +44,9 @@ Plugin Name: Skroutz.gr XML Feed
 Plugin URI: todo
 
 Description: Generate XML sheet according to skroutz.gr specs
+
 Tags: skroutz, skroutz.gr, XML, generate XML, price comparison
+
 Kudos: WebSharks™ http://www.websharks-inc.com
 
 -- end section for WordPress®. --------------------------------------------------------------------------------------------------------- */
