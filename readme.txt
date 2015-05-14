@@ -33,8 +33,9 @@ Please consult WordPress plugin [installation guide](https://codex.wordpress.org
 
 == Screenshots ==
 
-1. tbd
-2. tbd
+1. Main options
+2. Map options
+3. Info panel
 
 == Changelog ==
 
