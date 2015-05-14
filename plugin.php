@@ -35,13 +35,13 @@ License: GNU General Public License
 Contributors: pan.vagenas
 
 Author: Panagiotis Vagenas <pan.vagenas@gmail.com>
-Author URI: todo
+Author URI: http://gr.linkedin.com/in/panvagenas
 
 Text Domain: skroutz-xml-feed
 Domain Path: /translations
 
 Plugin Name: Skroutz.gr XML Feed
-Plugin URI: todo
+Plugin URI: https://github.com/panvagenas/skroutz-xml-feed
 
 Description: Generate XML sheet according to skroutz.gr specs
 

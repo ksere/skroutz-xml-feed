@@ -47,7 +47,7 @@
 		 'plugin_cap'     => 'manage_options',
 		 'plugin_name'    => 'Skroutz.gr XML Feed',
 		 'plugin_version' => '150110',
-		 'plugin_site'    => 'http://example.com', // todo
+		 'plugin_site'    => 'https://github.com/panvagenas/skroutz-xml-feed',
 
 		 'plugin_dir'     => dirname(dirname(dirname(__FILE__))) // Your plugin directory.
 

@@ -43,7 +43,7 @@ class options extends \xd_v141226_dev\options {
 	public function setup( $defaults, $validators ) {
 		$skroutzDefaults = array(
 			'encryption.key'                             => 'jkiabOKBNJO89347KJBKJBasfd',
-			'support.url'                                => '', // todo
+			'support.url'                                => 'https://github.com/panvagenas/skroutz-xml-feed/issues',
 			'styles.front_side.theme'                    => 'yeti',
 			'crons.config'                               => array(),
 			'menu_pages.theme'                           => 'yeti',
