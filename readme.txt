@@ -1,6 +1,6 @@
 === Skroutz.gr XML Feed for WooCommerce ===
 Contributors: pan.vagenas
-Tags: tbd
+Tags: feed, generate xml, price comparison, skroutz, skroutz.gr, xml, xml feed
 Requires at least: 3.5.1
 Tested up to: 4.2.2
 Stable tag: 150501
