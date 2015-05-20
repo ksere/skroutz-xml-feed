@@ -97,7 +97,7 @@ class options extends \xd_v141226_dev\options {
 			'map_manufacturer'                           => 0,
 			'map_mpn'                                    => 0,
 			'map_size'                                   => array(),
-			'map_size_use'                               => 1,
+			'map_size_use'                               => 0,
 			'map_color'                                  => array(),
 			'map_color_use'                              => 0,
 			/***********************************************
