@@ -162,7 +162,7 @@ class skroutz extends framework {
 
 			$this->©xml->appendProduct( $this->getProductArray( $product ) );
 		}
-
+		wp_cache_flush();
 		return $this->©xml->saveXML() ? $this->©xml->countProductsInFile( $this->©xml->simpleXML ) : 0;
 	}
 
