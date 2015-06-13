@@ -684,38 +684,6 @@ class skroutz extends framework
     }
 
     /**
-     * @param $string
-     *
-     * @return bool
-     * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-     * @since  141015
-     */
-    protected function isValidSizeString($string)
-    {
-        if (is_numeric($string)) {
-            return true;
-        }
-
-        $validStrings = array(
-          'XXS',
-          'XS',
-          'S',
-          'M',
-          'L',
-          'XL',
-          'XXL',
-          'XXXL',
-          'Extra Small',
-          'Small',
-          'Medium',
-          'Large',
-          'Extra Large'
-        );
-
-        return in_array($string, $validStrings);
-    }
-
-    /**
      * @param $mem
      *
      * @return bool
