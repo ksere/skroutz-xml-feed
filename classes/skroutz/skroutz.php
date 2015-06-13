@@ -228,14 +228,6 @@ class skroutz extends framework
                 $out['isbn'] = $isbn;
             }
         }
-        if (defined('SKROUTZ_DEBUG')) {
-            $out['debug'] = array(
-              'product_attr_size'  => $product->get_attribute('size'),
-              '_product_attr_size' => isset($out['size']) ? $out['size'] : null,
-              'product_attr_brand' => $product->get_attribute('brands'),
-              'product get attr'   => $product->get_attributes(),
-            );
-        }
 
         return $out;
     }
