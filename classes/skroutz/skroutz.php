@@ -328,38 +328,48 @@ class skroutz extends framework {
 	 * @since 141015
 	 */
 	protected function getProductColors( \WC_Product_Variable &$product ) {
-		if ( ! (bool) $this->©option->get( 'map_color_use' ) ) {
-			return null;
-		}
+        if (!(bool)$this->©option->get('map_color_use')) {
+            return null;
+        }
 
-		$map = $this->©option->get( 'map_size' );
-		if ( empty( $map ) ) {
-			return array();
-		}
+        $map = $this->©option->get('map_color');
+        if (empty($map)) {
+            return array();
+        }
 
-		$variations = $product->get_available_variations();
-		$colors     = array();
-		foreach ( $map as $attrId ) {
-			$taxonomy = $this->getTaxonomyById( $attrId );
+        $variations = $product->get_available_variations();
+        $colors     = array();
+        foreach ($map as $attrId) {
+            $taxonomy = $this->getTaxonomyById($attrId);
 
-			if ( ! $taxonomy ) {
-				break;
-			}
+            if (!$taxonomy) {
+                break;
+            }
 
-			foreach ( $variations as $variation ) {
-				$key = 'attribute_' . wc_attribute_taxonomy_name( $taxonomy->attribute_name );
-				if ( isset( $variation['attributes'][ $key ] ) && $variation['is_in_stock'] && $variation['is_purchasable'] ) {
-					$color = $this->sanitizeVariationString( $variation['attributes'][ $key ] );
-					if ( ! empty( $color ) ) {
-						$colors[] = $color;
-					}
-				}
-			}
-		}
+            foreach ($variations as $variation) {
+                $attrName = wc_attribute_taxonomy_name($taxonomy->attribute_name);
+                $key = 'attribute_'.$attrName;
+                if (isset($variation['attributes'][$key]) && $variation['is_in_stock'] && $variation['is_purchasable']) {
+                    if(empty($variation['attributes'][$key])){
+                        $attr = $product->get_attribute($attrName);
+                        if(is_string($attr) && !empty($attr)){
+                            $attrValues = array_map('trim',explode(',', $attr));
+                            $colors = array_merge($colors, $attrValues);
+                            break;
+                        }
+                    } else {
+                        $color = $variation['attributes'][$key];
+                        if (!empty($color)) {
+                            $colors[] = $color;
+                        }
+                    }
+                }
+            }
+        }
 
-		$colors = array_unique( $colors );
+        $colors = array_unique($colors);
 
-		return implode( ', ', $colors );
+        return implode(', ', $colors);
 	}
 
 	/**
@@ -405,51 +415,44 @@ class skroutz extends framework {
 	 * @since 141015
 	 */
 	protected function getProductSizes( \WC_Product_Variable &$product ) {
-		if ( ! (bool) $this->©option->get( 'map_size_use' ) ) {
-			return null;
-		}
+        if (!(bool)$this->©option->get('map_size_use')) {
+            return null;
+        }
 
-		$map = $this->©option->get( 'map_size' );
-		if ( empty( $map ) ) {
-			return array();
-		}
+        $map = $this->©option->get('map_size');
+        if (empty($map)) {
+            return array();
+        }
 
-		$variations = $product->get_available_variations();
-		$sizes      = array();
-		foreach ( $map as $attrId ) {
-			$taxonomy = $this->getTaxonomyById( $attrId );
+        $variations = $product->get_available_variations();
+        $sizes      = array();
+        foreach ($map as $attrId) {
+            $taxonomy = $this->getTaxonomyById($attrId);
 
-			if ( ! $taxonomy ) {
-				break;
-			}
+            if (!$taxonomy) {
+                break;
+            }
 
-			foreach ( $variations as $variation ) {
-				$key = 'attribute_' . wc_attribute_taxonomy_name( $taxonomy->attribute_name );
-				if ( isset( $variation['attributes'][ $key ] ) && $variation['is_in_stock'] && $variation['is_purchasable'] ) {
-					$size = $this->sanitizeVariationString( $variation['attributes'][ $key ] );
-					if ( $this->isValidSizeString( $size ) ) {
-						$sizes[] = $size;
-					}
-				}
-			}
-		}
-		$sizes = array_unique( $sizes );
+            foreach ($variations as $variation) {
+                $attrName = wc_attribute_taxonomy_name($taxonomy->attribute_name);
+                $key = 'attribute_'.$attrName;
+                if (isset($variation['attributes'][$key]) && $variation['is_in_stock'] && $variation['is_purchasable']) {
+                    if(empty($variation['attributes'][$key])){
+                        $attr = $product->get_attribute($attrName);
+                        if(is_string($attr) && !empty($attr)){
+                            $attrValues = array_map('trim',explode(',', $attr));
+                            $sizes = array_merge($sizes, $attrValues);
+                            break;
+                        }
+                    } else {
+                        $sizes[] = $variation['attributes'][$key];
+                    }
+                }
+            }
+        }
+        $sizes = array_unique($sizes);
 
-		return implode( ', ', $sizes );
-	}
-
-	/**
-	 * @param $string
-	 *
-	 * @return mixed|string
-	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
-	 */
-	protected function sanitizeVariationString( $string ) {
-		$string = preg_replace( "/[^A-Za-z0-9 ]/", '.', strip_tags( trim( $string ) ) );
-		$string = strtoupper( $string );
-
-		return $string;
+        return implode(', ', $sizes);
 	}
 
 	/**
