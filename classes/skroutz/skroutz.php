@@ -719,4 +719,25 @@ class skroutz extends framework
 
         return false;
     }
+
+	/**
+	 * @return bool
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150707
+	 */
+	public function hasBrandsPlugin(){
+		return is_plugin_active('woocommerce-brands/woocommerce-brands.php') && taxonomy_exists('product_brand');
+	}
+
+	/**
+	 * @return bool|null|object
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150707
+	 */
+	public function getBrandsPluginTaxonomy(){
+		if($this->hasBrandsPlugin()){
+			return get_taxonomy('product_brand');
+		}
+		return null;
+	}
 }

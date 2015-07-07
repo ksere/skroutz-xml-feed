@@ -74,11 +74,19 @@ $attrTaxonomies = wc_get_attribute_taxonomies();
 					'label' => $this->__( 'Use Product Tags' ),
 					'value' => 'product_tag'
 				);
+				global $wp_taxonomies;
 
 				foreach ( $attrTaxonomies as $taxonomies ) {
 					$options[] = array(
 						'label' => $taxonomies->attribute_label,
 						'value' => $taxonomies->attribute_id
+					);
+				}
+
+				if($this->©skroutz->hasBrandsPlugin() && ($brandsTax = $this->©skroutz->getBrandsPluginTaxonomy())){
+					$options[] = array(
+						'label' => 'Use WooCommerce Brands Plugin',
+						'value' => $brandsTax->name
 					);
 				}
 
