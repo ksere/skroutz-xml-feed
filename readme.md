@@ -39,6 +39,10 @@ along with this program.  If not, see [http://www.gnu.org/licenses/](http://www.
 
 ## Changelog
 
+#### 150707
+
+WooCommerce Brands Addon support
+
 #### 150610
 
 * Fixed: Bug fix in color attributes
