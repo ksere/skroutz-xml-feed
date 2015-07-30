@@ -119,12 +119,9 @@ class skroutz extends framework
     {
         $prodArray = (array)$this->©db->get_col('SELECT ID FROM '.$this->©db->posts.' WHERE post_type="product" AND post_status="publish"');
 
+        $this->©env->maximize_time_memory_limits();
+
         $mem = $this->getMemInM(ini_get('memory_limit')) / 1024 / 1024;
-
-        $time = max(ceil(count($prodArray) * 0.5), 30);
-        set_time_limit($time);
-
-        $this->©diagnostic->forceDBLog('product', array(), 'Memory set to '.$mem.'M for current session<br>Time set to '.$time.' sec for current session');
 
         $memLimit = ($mem - 10) * 1024 * 1024;
 
