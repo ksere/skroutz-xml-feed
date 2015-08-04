@@ -16,7 +16,20 @@ if ( ! defined( 'WPINC' ) ) {
 /* @var \skroutz\menu_pages\panels\main_settings $callee */
 /* @var \xd_v141226_dev\views $this */
 $showAdvanced = (bool)$this->©option->get( 'show_advanced' );
-$showAdvancedHide = $showAdvanced ? '' : ' style="display:none;"'
+$showAdvancedHide = $showAdvanced ? '' : ' style="display:none;"';
+$availOptions = array();
+foreach ( $this->©options->availOptions as $value => $label ) {
+	$availOptions[] = array(
+		'label' => $label,
+		'value' => (string) $value
+	);
+}
+
+$availOptionsDoNotInclude   = $availOptions;
+$availOptionsDoNotInclude[] = array(
+	'label' => $this->__( 'Do not Include' ),
+	'value' => (string) count( $availOptions )
+);
 ?>
 <div class="form-horizontal main-settings-form-wrapper" role="form">
 	<div class="form-group row">
@@ -133,7 +146,6 @@ $showAdvancedHide = $showAdvanced ? '' : ' style="display:none;"'
 				'name'        => '[xml_location]',
 				'title'       => $this->__( 'XML File Location' ),
 				'placeholder' => $this->__( 'Enter the location you want the file to be saved, relative to WordPress install dir' ),
-				'required'    => true,
 				'id'          => 'xml-location',
 				'attrs'       => '',
 				'classes'     => 'form-control col-md-10'
@@ -205,32 +217,7 @@ $showAdvancedHide = $showAdvanced ? '' : ' style="display:none;"'
 				'id'          => 'avail-inStock',
 				'attrs'       => '',
 				'classes'     => 'form-control col-md-10',
-				'options'     => array(
-					array(
-						'label' => $this->__( 'Available' ),
-						'value' => '0'
-					),
-					array(
-						'label' => $this->__( '1 to 3 days' ),
-						'value' => '1'
-					),
-					array(
-						'label' => $this->__( '4 to 7 days' ),
-						'value' => '2'
-					),
-					array(
-						'label' => $this->__( '7+ days' ),
-						'value' => '3'
-					),
-					array(
-						'label' => $this->__( 'Upon order' ),
-						'value' => '4'
-					),
-					array(
-						'label' => $this->__( 'Pre-order' ),
-						'value' => '5'
-					)
-				)
+				'options'     => $availOptions
 			);
 			echo $callee->menu_page->option_form_fields->markup( $this->©option->get( 'avail_inStock' ), $inputOptions );
 			?>
@@ -256,36 +243,7 @@ $showAdvancedHide = $showAdvanced ? '' : ' style="display:none;"'
 				'id'          => 'avail-outOfStock',
 				'attrs'       => '',
 				'classes'     => 'form-control col-md-10',
-				'options'     => array(
-					array(
-						'label' => $this->__( 'Available' ),
-						'value' => '0'
-					),
-					array(
-						'label' => $this->__( '1 to 3 days' ),
-						'value' => '1'
-					),
-					array(
-						'label' => $this->__( '4 to 7 days' ),
-						'value' => '2'
-					),
-					array(
-						'label' => $this->__( '7+ days' ),
-						'value' => '3'
-					),
-					array(
-						'label' => $this->__( 'Upon order' ),
-						'value' => '4'
-					),
-					array(
-						'label' => $this->__( 'Pre-order' ),
-						'value' => '5'
-					),
-					array(
-						'label' => $this->__( 'Do not Include' ),
-						'value' => '6'
-					)
-				)
+				'options'     => $availOptionsDoNotInclude
 			);
 			echo $callee->menu_page->option_form_fields->markup( $this->©option->get( 'avail_outOfStock' ), $inputOptions );
 			?>
@@ -307,36 +265,7 @@ $showAdvancedHide = $showAdvanced ? '' : ' style="display:none;"'
 				'id'          => 'avail-backorders',
 				'attrs'       => '',
 				'classes'     => 'form-control col-md-10',
-				'options'     => array(
-					array(
-						'label' => $this->__( 'Available' ),
-						'value' => '0'
-					),
-					array(
-						'label' => $this->__( '1 to 3 days' ),
-						'value' => '1'
-					),
-					array(
-						'label' => $this->__( '4 to 7 days' ),
-						'value' => '2'
-					),
-					array(
-						'label' => $this->__( '7+ days' ),
-						'value' => '3'
-					),
-					array(
-						'label' => $this->__( 'Upon order' ),
-						'value' => '4'
-					),
-					array(
-						'label' => $this->__( 'Pre-order' ),
-						'value' => '5'
-					),
-					array(
-						'label' => $this->__( 'Do not Include' ),
-						'value' => '6'
-					)
-				)
+				'options'     => $availOptionsDoNotInclude
 			);
 			echo $callee->menu_page->option_form_fields->markup( $this->©option->get( 'avail_backorders' ), $inputOptions );
 			?>
