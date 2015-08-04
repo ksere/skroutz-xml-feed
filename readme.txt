@@ -3,7 +3,7 @@ Contributors: pan.vagenas
 Tags: feed, generate xml, price comparison, skroutz, skroutz.gr, xml, xml feed
 Requires at least: 3.5.1
 Tested up to: 4.2.2
-Stable tag: 150707
+Stable tag: 150804
 License: GNU General Public License V3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -39,9 +39,14 @@ Please consult WordPress plugin [installation guide](https://codex.wordpress.org
 
 == Changelog ==
 
+#### 150804
+
+* New availability strings
+* Fixed: Options submiting bug when XML path were empty
+
 #### 150707
 
-WooCommerce Brands Addon support
+* WooCommerce Brands Addon support
 
 #### 150610
 

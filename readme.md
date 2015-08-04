@@ -39,9 +39,14 @@ along with this program.  If not, see [http://www.gnu.org/licenses/](http://www.
 
 ## Changelog
 
+#### 150804
+
+* New availability strings
+* Fixed: Options submiting bug when XML path were empty
+
 #### 150707
 
-WooCommerce Brands Addon support
+* WooCommerce Brands Addon support
 
 #### 150610
 
