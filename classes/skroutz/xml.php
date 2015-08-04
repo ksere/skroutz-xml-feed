@@ -240,7 +240,9 @@ class xml extends \xd_v141226_dev\xml {
 			return $value;
 		}
 
-		return substr( (string) $value, 0, $this->skzXMLFieldsLengths[ $fieldName ] );
+$ln = mb_strlen($value);
+
+		return mb_substr( (string) $value, 0, $this->skzXMLFieldsLengths[ $fieldName ] );
 	}
 
 
