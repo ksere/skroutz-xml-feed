@@ -19,8 +19,8 @@
 
 /* -- WordPress® --------------------------------------------------------------------------------------------------------------------------
 
-Version: 150804
-Stable tag: 150804
+Version: 150825
+Stable tag: 150825
 Tested up to: 4.2.2
 Requires at least: 3.5.1
 
@@ -51,12 +51,9 @@ Kudos: WebSharks™ http://www.websharks-inc.com
 
 -- end section for WordPress®. --------------------------------------------------------------------------------------------------------- */
 
-namespace skroutz {
-
-	if ( ! defined( 'WPINC' ) ) {
-		die;
-	}
-	require_once dirname( __FILE__ ) . '/includes/SimpleXMLExtended.php';
-
-	require_once dirname( __FILE__ ) . '/classes/skroutz/framework.php';
+if ( ! defined( 'WPINC' ) ) {
+	die;
 }
+
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/getherbert/framework/bootstrap/autoload.php';

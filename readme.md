@@ -39,6 +39,9 @@ along with this program.  If not, see [http://www.gnu.org/licenses/](http://www.
 
 ## Changelog
 
+#### 150825
+
+
 #### 150804
 
 * New availability strings
