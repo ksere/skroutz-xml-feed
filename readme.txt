@@ -42,6 +42,7 @@ Please consult WordPress plugin [installation guide](https://codex.wordpress.org
 #### 150804
 
 * New availability strings
+* Fixed: Availability when product is out of stock and/or backorders allowed
 * Fixed: Options submiting bug when XML path were empty
 
 #### 150707

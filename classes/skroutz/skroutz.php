@@ -8,8 +8,6 @@
 
 namespace skroutz;
 
-use xd_v141226_dev\instance;
-
 if (!defined('WPINC')) {
     exit('Do NOT access this file directly: '.basename(__FILE__));
 }
@@ -150,12 +148,12 @@ class skroutz extends framework
                     $reason[] = 'product is unavailable';
                 }
                 $this->©diagnostic->forceDBLog(
-                  'product', array(
-                  'id'             => $product->id,
-                  'SKU'            => $product->get_sku(),
-                  'is_purchasable' => $product->is_purchasable(),
-                  'is_visible'     => $product->is_visible(),
-                  'availability'   => $this->getAvailabilityString($product)
+                    'product', array(
+                    'id'             => $product->id,
+                    'SKU'            => $product->get_sku(),
+                    'is_purchasable' => $product->is_purchasable(),
+                    'is_visible'     => $product->is_visible(),
+                    'availability'   => $this->getAvailabilityString($product)
                 ), 'Product <strong>'.$product->get_formatted_name().'</strong> failed. Reason(s) is(are): '.implode(', ', $reason)
                 );
                 continue;
@@ -304,7 +302,7 @@ class skroutz extends framework
     /**
      * @param $taxonomyId
      *
-     * @return null
+     * @return \stdClass
      * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
      * @since  141015
      */
@@ -615,20 +613,34 @@ class skroutz extends framework
      */
     protected function getAvailabilityString(\WC_Product &$product)
     {
-        // If product is in stock
-        if ($product->is_in_stock()) {
-            return $this->©option->availOptions[$this->©option->get('avail_inStock')];
-        } elseif ($product->backorders_allowed()) {
-            // if product is out of stock and no backorders then return false
-            if ($this->©option->get('avail_backorders') == count($this->©option->availOptions)) {
-                return false;
-            }
+        $stockStatusInStock = $product->stock_status === 'instock';
+        $manageStock = $product->managing_stock();
+        $backOrdersAllowed = $product->backorders_allowed();
+        $hasQuantity = $product->get_stock_quantity() > 0;
 
-            // else return value
-            return $this->©option->availOptions[$this->©option->get('avail_backorders')];
-        } elseif ($this->©option->get('avail_outOfStock') != count($this->©option->availOptions)) {
-            // no stock, no backorders but must include product. Return value
-            return $this->©option->availOptions[$this->©option->get('avail_outOfStock')];
+        if($manageStock){
+            if($hasQuantity) {
+                return $this->©option->availOptions[$this->©option->get('avail_inStock')];
+            } elseif(!$backOrdersAllowed) {
+                if ($this->©option->get('avail_outOfStock') == count($this->©option->availOptions)) {
+                    return false;
+                }
+                return $this->©option->availOptions[$this->©option->get('avail_outOfStock')];
+            } else {
+                if ($this->©option->get('avail_backorders') == count($this->©option->availOptions)) {
+                    return false;
+                }
+                return $this->©option->availOptions[$this->©option->get('avail_backorders')];
+            }
+        } else {
+            if($stockStatusInStock){
+                return $this->©option->availOptions[$this->©option->get('avail_inStock')];
+            } elseif($backOrdersAllowed){
+                if ($this->©option->get('avail_backorders') == count($this->©option->availOptions)) {
+                    return false;
+                }
+                return $this->©option->availOptions[$this->©option->get('avail_backorders')];
+            }
         }
 
         return false;
@@ -717,24 +729,24 @@ class skroutz extends framework
         return false;
     }
 
-	/**
-	 * @return bool
-	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 150707
-	 */
-	public function hasBrandsPlugin(){
-		return is_plugin_active('woocommerce-brands/woocommerce-brands.php') && taxonomy_exists('product_brand');
-	}
+    /**
+     * @return bool
+     * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+     * @since 150707
+     */
+    public function hasBrandsPlugin(){
+        return is_plugin_active('woocommerce-brands/woocommerce-brands.php') && taxonomy_exists('product_brand');
+    }
 
-	/**
-	 * @return bool|null|object
-	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 150707
-	 */
-	public function getBrandsPluginTaxonomy(){
-		if($this->hasBrandsPlugin()){
-			return get_taxonomy('product_brand');
-		}
-		return null;
-	}
+    /**
+     * @return bool|null|object
+     * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+     * @since 150707
+     */
+    public function getBrandsPluginTaxonomy(){
+        if($this->hasBrandsPlugin()){
+            return get_taxonomy('product_brand');
+        }
+        return null;
+    }
 }
