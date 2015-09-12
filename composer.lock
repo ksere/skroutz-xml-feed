@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e37bbad7966ba36ca44b842e5077cda5",
+    "hash": "31a53cab05a4bb7f8b8e75c025f8b7ff",
     "packages": [
         {
             "name": "aura/session",
@@ -445,12 +445,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/panvagenas/wp-plugin-core.git",
-                "reference": "7c388c1c8eb8c4f552472a344660b3309880f461"
+                "reference": "a306ada49fd2b91eee6bf9aab12bd859811394aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/panvagenas/wp-plugin-core/zipball/7c388c1c8eb8c4f552472a344660b3309880f461",
-                "reference": "7c388c1c8eb8c4f552472a344660b3309880f461",
+                "url": "https://api.github.com/repos/panvagenas/wp-plugin-core/zipball/a306ada49fd2b91eee6bf9aab12bd859811394aa",
+                "reference": "a306ada49fd2b91eee6bf9aab12bd859811394aa",
                 "shasum": ""
             },
             "require": {
@@ -491,7 +491,7 @@
                 }
             ],
             "description": "WP Plugins Core for developing plugins",
-            "time": "2015-09-09 21:39:50"
+            "time": "2015-09-12 13:51:56"
         },
         {
             "name": "psr/log",
