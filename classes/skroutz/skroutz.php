@@ -8,8 +8,6 @@
 
 namespace skroutz;
 
-use xd_v141226_dev\fw_constants;
-
 if (!defined('WPINC')) {
     exit('Do NOT access this file directly: '.basename(__FILE__));
 }
