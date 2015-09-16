@@ -8,6 +8,8 @@
 
 namespace skroutz;
 
+use xd_v141226_dev\fw_constants;
+
 if (!defined('WPINC')) {
     exit('Do NOT access this file directly: '.basename(__FILE__));
 }
@@ -65,11 +67,11 @@ class skroutz extends framework
 
         $this->©option->update(array('log' => array()));
 
-        $this->©diagnostic->forceDBLog('product', array(), '<strong>Skroutz XML generation started at '.date('d M, Y H:i:s').'</strong>');
+        $this->©success->forceDBLog('product', array(), '<strong>Skroutz XML generation started at '.date('d M, Y H:i:s').'</strong>');
 
         $prodInXml = $this->processProducts();
 
-        $this->©diagnostic->forceDBLog('product', array(), '<strong>Skroutz XML generation finished at '.date('d M, Y H:i:s').'</strong><br>Time taken: '.round(microtime(true) - $sTime, 2).' sec<br>Mem details: '.$this->©env->memory_details());
+        $this->©success->forceDBLog('product', array(), '<strong>Skroutz XML generation finished at '.date('d M, Y H:i:s').'</strong><br>Time taken: '.round(microtime(true) - $sTime, 2).' sec<br>Mem details: '.$this->©env->memory_details());
 
         return $prodInXml;
     }
@@ -132,7 +134,7 @@ class skroutz extends framework
             $product = WC()->product_factory->get_product((int)$pid);
 
             if (!is_object($product) || !($product instanceof \WC_Product)) {
-                $this->©diagnostic->forceDBLog('product', $product, 'Product failed in '.__METHOD__);
+                $this->©error->forceDBLog('product', $product, 'Product failed in '.__METHOD__);
                 continue;
             }
 
@@ -147,7 +149,7 @@ class skroutz extends framework
                 if ($this->getAvailabilityString($product) === false) {
                     $reason[] = 'product is unavailable';
                 }
-                $this->©diagnostic->forceDBLog(
+                $this->©message->forceDBLog(
                     'product', array(
                     'id'             => $product->id,
                     'SKU'            => $product->get_sku(),

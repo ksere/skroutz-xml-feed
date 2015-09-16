@@ -189,7 +189,10 @@ class xml extends \xd_v141226_dev\xml {
 					}
 				}
 				$name = isset( $array['name'] ) ? $array['name'] : ( isset( $array['id'] ) ? 'with id ' . $array['id'] : '' );
-				$this->©diagnostic->forceDBLog(
+				if(isset($array['link'])){
+					$name = '<a href="' . $array['link'] . '" target="_blank">' . $name . '</a>';
+				}
+				$this->©error->forceDBLog(
 					'product',
 					$array,
 					'Product <strong>' . $name . '</strong> not included in XML file because field(s) ' . implode( ', ', $fields ) . ' is/are missing or is invalid'
