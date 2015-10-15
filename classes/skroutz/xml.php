@@ -16,6 +16,24 @@ if ( ! defined( 'WPINC' ) ) {
 
 class xml extends \xd_v141226_dev\xml {
 	/**
+	 * @var \SimpleXMLExtended
+	 */
+	public $simpleXML = null;
+	/**
+	 * Absolute file path
+	 *
+	 * @var string
+	 */
+	public $fileLocation = '';
+	/**
+	 * @var null
+	 */
+	public $createdAt = null;
+	/**
+	 * @var string
+	 */
+	public $createdAtName = 'created_at';
+	/**
 	 * @var array
 	 */
 	protected $skzXMLFields = array(
@@ -33,7 +51,6 @@ class xml extends \xd_v141226_dev\xml {
 		'size',
 		'color',
 	);
-
 	/**
 	 * @var array
 	 */
@@ -52,7 +69,6 @@ class xml extends \xd_v141226_dev\xml {
 		'size'           => 500,
 		'color'          => 100,
 	);
-
 	/**
 	 * @var array
 	 */
@@ -68,28 +84,6 @@ class xml extends \xd_v141226_dev\xml {
 		'manufacturer',
 		'mpn',
 	);
-
-	/**
-	 * @var \SimpleXMLExtended
-	 */
-	public $simpleXML = null;
-
-	/**
-	 * Absolute file path
-	 *
-	 * @var string
-	 */
-	public $fileLocation = '';
-
-	/**
-	 * @var null
-	 */
-	public $createdAt = null;
-	/**
-	 * @var string
-	 */
-	public $createdAtName = 'created_at';
-
 	/**
 	 * @var string
 	 */
@@ -108,7 +102,7 @@ class xml extends \xd_v141226_dev\xml {
 	 *
 	 * @return bool
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
+	 * @since  141015
 	 */
 	public function parseArray( Array $array ) {
 		// init simple xml if is not initialized already
@@ -125,11 +119,42 @@ class xml extends \xd_v141226_dev\xml {
 	}
 
 	/**
+	 * @return $this
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since  141015
+	 */
+	protected function initSimpleXML() {
+		$this->fileLocation = $this->getFileLocation();
+
+		$this->simpleXML = new \SimpleXMLExtended( '<?xml version="1.0" encoding="UTF-8"?><' . $this->rootElemName . '></' . $this->rootElemName . '>' );
+		$this->simpleXML->addChild( $this->productsElemWrapper );
+
+		return $this;
+	}
+
+	/**
+	 * Returns the file location based on settings (even if it isn't exists)
+	 *
+	 * @return string
+	 * @throws exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since  141015
+	 */
+	public function getFileLocation() {
+		$location = $this->©options->get( 'xml_location' );
+		$fileName = $this->©options->get( 'xml_fileName' );
+
+		$location = empty( $location ) || $location == '/' ? '' : ( trim( $location, '\\/' ) . '/' );
+
+		return rtrim( ABSPATH, '\\/' ) . '/' . $location . trim( $fileName, '\\/' );
+	}
+
+	/**
 	 * @param array $p
 	 *
 	 * @return int
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 150130
+	 * @since  150130
 	 */
 	public function appendProduct( Array $p ) {
 		if ( ! $this->simpleXML ) {
@@ -159,25 +184,11 @@ class xml extends \xd_v141226_dev\xml {
 	}
 
 	/**
-	 * @return $this
-	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
-	 */
-	protected function initSimpleXML() {
-		$this->fileLocation = $this->getFileLocation();
-
-		$this->simpleXML = new \SimpleXMLExtended( '<?xml version="1.0" encoding="UTF-8"?><' . $this->rootElemName . '></' . $this->rootElemName . '>' );
-		$this->simpleXML->addChild( $this->productsElemWrapper );
-
-		return $this;
-	}
-
-	/**
 	 * @param array $array
 	 *
 	 * @return array
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
+	 * @since  141015
 	 */
 	protected function validateArrayKeys( Array $array ) {
 		foreach ( $this->skzXMLRequiredFields as $fieldName ) {
@@ -189,13 +200,14 @@ class xml extends \xd_v141226_dev\xml {
 					}
 				}
 				$name = isset( $array['name'] ) ? $array['name'] : ( isset( $array['id'] ) ? 'with id ' . $array['id'] : '' );
-				if(isset($array['link'])){
+				if ( isset( $array['link'] ) ) {
 					$name = '<a href="' . $array['link'] . '" target="_blank">' . $name . '</a>';
 				}
 				$this->©error->forceDBLog(
 					'product',
 					$array,
-					'Product <strong>' . $name . '</strong> not included in XML file because field(s) ' . implode( ', ', $fields ) . ' is/are missing or is invalid'
+					'Product <strong>' . $name . '</strong> not included in XML file because field(s) ' . implode( ', ',
+						$fields ) . ' is/are missing or is invalid'
 				);
 
 				return array();
@@ -216,23 +228,13 @@ class xml extends \xd_v141226_dev\xml {
 		return $array;
 	}
 
-	protected function isValidXmlName( $name ) {
-		try {
-			new \DOMElement( $name );
-
-			return true;
-		} catch ( \DOMException $e ) {
-			return false;
-		}
-	}
-
 	/**
 	 * @param $value
 	 * @param $fieldName
 	 *
 	 * @return bool|string
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
+	 * @since  141015
 	 */
 	protected function trimField( $value, $fieldName ) {
 		if ( ! isset( $this->skzXMLFieldsLengths[ $fieldName ] ) ) {
@@ -246,42 +248,37 @@ class xml extends \xd_v141226_dev\xml {
 		return mb_substr( (string) $value, 0, $this->skzXMLFieldsLengths[ $fieldName ] );
 	}
 
-
-	/**
-	 * @return bool
-	 * @throws exception
-	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
-	 */
-	protected function loadXML() {
-		/**
-		 * For now we write it from scratch EVERY TIME
-		 */
-		$this->fileLocation = $this->getFileLocation();
-
-//		if(file_exists($this->fileLocation)){
-//			$this->simpleXML = new \SimpleXMLExtended(simplexml_load_file($this->fileLocation)->asXML());
-//			return true;
-//		}
-
-		return false;
-
+	protected function isValidXmlName( $name ) {
 		try {
-			$locate = $this->©dirs_files->locate( $fileLocation, get_home_path() );
-		} catch ( exception $e ) {
+			new \DOMElement( $name );
+
+			return true;
+		} catch ( \DOMException $e ) {
 			return false;
 		}
+	}
 
-		if ( ! empty( $locate ) && file_exists( $locate ) && is_readable( $locate ) ) {
-			$this->simpleXML = simplexml_load_file( $locate );
-			if ( $this->simpleXML !== false ) {
-				$this->fileLocation = $locate;
+	/**
+	 * @return bool|mixed
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since  141015
+	 */
+	public function saveXML() {
+		if ( ! ( $this->simpleXML instanceof \SimpleXMLExtended ) ) {
+			return false;
+		}
+		$dir = dirname( $this->fileLocation );
+		if ( ! file_exists( $dir ) ) {
+			mkdir( $dir, 0755, true );
+		}
 
-				return true;
+		if ( $this->simpleXML && ! empty( $this->fileLocation ) && ( is_writable( $this->fileLocation ) || is_writable( $dir ) ) ) {
+			if ( is_file( $this->fileLocation ) ) {
+				unlink( $this->fileLocation );
 			}
-		} else {
-			// Assuming ABSPATH is writable
-			$this->fileLocation = $this->getFileLocation;
+			$this->simpleXML->addChild( $this->createdAtName, date( 'Y-m-d H:i' ) );
+
+			return $this->simpleXML->asXML( $this->fileLocation );
 		}
 
 		return false;
@@ -293,7 +290,7 @@ class xml extends \xd_v141226_dev\xml {
 	 *
 	 * @return bool|mixed
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
+	 * @since  141015
 	 */
 	public function updateProductInXML( $prodId, Array $newValues ) {
 		$newValues = $this->validateArrayKeys( $newValues );
@@ -326,7 +323,7 @@ class xml extends \xd_v141226_dev\xml {
 	 *
 	 * @return bool
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
+	 * @since  141015
 	 */
 	protected function locateProductNode( $nodeId ) {
 		if ( ! ( $this->simpleXML instanceof \SimpleXMLElement ) ) {
@@ -343,37 +340,11 @@ class xml extends \xd_v141226_dev\xml {
 	}
 
 	/**
-	 * @return bool|mixed
-	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
-	 */
-	public function saveXML() {
-		if ( ! ( $this->simpleXML instanceof \SimpleXMLExtended ) ) {
-			return false;
-		}
-		$dir = dirname( $this->fileLocation );
-		if ( ! file_exists( $dir ) ) {
-			mkdir( $dir, 0755, true );
-		}
-
-		if ( $this->simpleXML && ! empty( $this->fileLocation ) && ( is_writable( $this->fileLocation ) || is_writable( $dir ) ) ) {
-			if ( is_file( $this->fileLocation ) ) {
-				unlink( $this->fileLocation );
-			}
-			$this->simpleXML->addChild( $this->createdAtName, date( 'Y-m-d H:i' ) );
-
-			return $this->simpleXML->asXML( $this->fileLocation );
-		}
-
-		return false;
-	}
-
-	/**
 	 * Print SimpleXMLElement $this->simpleXML to screen
 	 *
 	 * @throws exception
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
+	 * @since  141015
 	 */
 	public function printXML() {
 		if ( headers_sent() ) {
@@ -396,20 +367,16 @@ class xml extends \xd_v141226_dev\xml {
 	}
 
 	/**
-	 * Returns the file location based on settings (even if it isn't exists)
+	 * Checks if file exists and is readable
 	 *
-	 * @return string
-	 * @throws exception
+	 * @param $file string File location
+	 *
+	 * @return bool
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
+	 * @since  141015
 	 */
-	public function getFileLocation() {
-		$location = $this->©options->get( 'xml_location' );
-		$fileName = $this->©options->get( 'xml_fileName' );
-
-		$location = empty( $location ) || $location == '/' ? '' : ( trim( $location, '\\/' ) . '/' );
-
-		return rtrim( ABSPATH, '\\/' ) . '/' . $location . trim( $fileName, '\\/' );
+	protected function existsAndReadable( $file ) {
+		return is_string( $file ) && file_exists( $file ) && is_readable( $file );
 	}
 
 	/**
@@ -417,7 +384,7 @@ class xml extends \xd_v141226_dev\xml {
 	 *
 	 * @return array|null
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
+	 * @since  141015
 	 */
 	public function getFileInfo() {
 		$fileLocation = $this->getFileLocation();
@@ -460,7 +427,7 @@ class xml extends \xd_v141226_dev\xml {
 	 *
 	 * @return int Total products in file
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
+	 * @since  141015
 	 */
 	public function countProductsInFile( $file ) {
 		if ( $this->existsAndReadable( $file ) ) {
@@ -481,15 +448,42 @@ class xml extends \xd_v141226_dev\xml {
 	}
 
 	/**
-	 * Checks if file exists and is readable
-	 *
-	 * @param $file string File location
-	 *
 	 * @return bool
+	 * @throws exception
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since 141015
+	 * @since  141015
 	 */
-	protected function existsAndReadable( $file ) {
-		return is_string( $file ) && file_exists( $file ) && is_readable( $file );
+	protected function loadXML() {
+		/**
+		 * For now we write it from scratch EVERY TIME
+		 */
+		$this->fileLocation = $this->getFileLocation();
+
+//		if(file_exists($this->fileLocation)){
+//			$this->simpleXML = new \SimpleXMLExtended(simplexml_load_file($this->fileLocation)->asXML());
+//			return true;
+//		}
+
+		return false;
+
+		try {
+			$locate = $this->©dirs_files->locate( $fileLocation, get_home_path() );
+		} catch ( exception $e ) {
+			return false;
+		}
+
+		if ( ! empty( $locate ) && file_exists( $locate ) && is_readable( $locate ) ) {
+			$this->simpleXML = simplexml_load_file( $locate );
+			if ( $this->simpleXML !== false ) {
+				$this->fileLocation = $locate;
+
+				return true;
+			}
+		} else {
+			// Assuming ABSPATH is writable
+			$this->fileLocation = $this->getFileLocation;
+		}
+
+		return false;
 	}
 } 
