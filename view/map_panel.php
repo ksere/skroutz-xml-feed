@@ -317,7 +317,7 @@ $attrTaxonomies = wc_get_attribute_taxonomies();
             <label for="map-category"
                    class="col-md-3 control-label"><?php echo $this->__( 'Product Categories' ); ?></label>
 
-            <div class="col-sm-7">
+            <div class="col-sm-3">
                 <?php
 
                 $options = array();
@@ -352,6 +352,28 @@ $attrTaxonomies = wc_get_attribute_taxonomies();
                 );
                 echo $callee->menu_page->option_form_fields->markup( $this->©option->get( 'map_category' ),
                     $inputOptions );
+                ?>
+            </div>
+
+            <?php
+            $hide = 'style="' . ( is_numeric( $this->©option->get( 'map_category' ) ) ? 'display:none;' : '') . '"';
+            ?>
+            <label for="map-category-tree" <?php echo $hide; ?>
+                   class="col-md-3 control-label hide-if-not-product-tax"><?php echo $this->__( 'Include full path to product category' ); ?></label>
+
+            <div class="col-sm-3 hide-if-not-product-tax" <?php echo $hide; ?>>
+                <?php
+                $mapCategoryTree = $this->©option->get( 'map_category_tree' );
+
+                $inputOptions = array(
+                    'type'    => 'checkbox',
+                    'name'    => '[map_category_tree]',
+                    'title'   => $this->__( 'Include full path to product category' ),
+                    'id'      => 'map-category-tree',
+                    'classes' => 'form-control'
+                );
+
+                echo $callee->menu_page->option_form_fields->markup( $mapCategoryTree, $inputOptions );
                 ?>
             </div>
 

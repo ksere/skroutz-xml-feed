@@ -93,7 +93,7 @@ class options extends \xd_v141226_dev\options {
             'map_link'                                   => 0,
             'map_image'                                  => 3,
             'map_category'                               => 'product',
-            'map_category_tree'                          => 1,
+            'map_category_tree'                          => 0,
             'map_price_with_vat'                         => 1,
             'map_manufacturer'                           => 0,
             'map_mpn'                                    => 0,
@@ -150,7 +150,7 @@ class options extends \xd_v141226_dev\options {
             'map_link'               => array( 'string:numeric >=' => 0 ),
             'map_image'              => array( 'string:numeric >=' => 0 ),
             'map_category'           => array( 'string' ),
-            'map_category_tree'          => array( 'string:numeric >=' => 0, 'string:numeric <=' => 1 ),
+            'map_category_tree'      => array( 'string:numeric >=' => 0, 'string:numeric <=' => 1 ),
             'map_price_with_vat'     => array( 'string:numeric >=' => 0, 'string:numeric <=' => 3 ),
             'map_manufacturer'       => array( 'string' ),
             'map_mpn'                => array( 'string:numeric >=' => 0 ),
@@ -176,7 +176,7 @@ class options extends \xd_v141226_dev\options {
      * @param array $new_options
      */
     public function ®update( $new_options = array() ) {
-        $bools = array( 'is_fashion_store', 'map_name_append_sku', 'map_color_use', 'map_size_use', 'show_advanced' );
+        $bools = array( 'is_fashion_store', 'map_name_append_sku', 'map_color_use', 'map_size_use', 'show_advanced', 'map_category_tree' );
         foreach ( $bools as $v ) {
             if ( ! isset( $new_options[ $v ] ) ) {
                 $new_options[ $v ] = 0;

@@ -263,7 +263,9 @@ class skroutz extends framework {
             $categories = $this->getProductAttrValue( $product, $option, '' );
         }
         if ( empty( $categories ) ) {
-            $categories = $this->getFormatedTextFromTerms( $product, $option );
+            $categories = $this->getFormatedTextFromTerms( $product,
+                $option,
+                (bool) $this->©option->get( 'map_category_tree' ) && ! is_numeric( $option ) );
         }
 
         return $categories;
@@ -271,23 +273,81 @@ class skroutz extends framework {
 
     /**
      * @param \WC_Product $product
-	 * @param             $term
+     * @param string      $productTerm
+     * @param bool|false  $includeParents
      *
      * @return string
-     * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-     * @since  141015
+     * @internal param $term
+     *
+     * @author   Panagiotis Vagenas <pan.vagenas@gmail.com>
+     * @since    141015
      */
-	protected function getFormatedTextFromTerms( \WC_Product &$product, $term ) {
-		$terms = get_the_terms( $product->id, $term );
+    protected function getFormatedTextFromTerms( \WC_Product &$product, $productTerm, $includeParents = false ) {
+        $terms = get_the_terms( $product->id, $productTerm );
         $out   = array();
+
         if ( is_array( $terms ) ) {
-            foreach ( $terms as $k => $term ) {
-                $name  = rtrim( ltrim( $term->name ) );
-                $out[] = $name;
+            $occurredTaxIds = array();
+            foreach ( $terms as $term ) {
+                if ( $includeParents && in_array( $term->term_id, $occurredTaxIds ) ) {
+                    continue;
+                }
+
+                if ( $includeParents ) {
+                    $ancestors = get_ancestors( $term->term_id, $productTerm );
+                    foreach ( $ancestors as $ancestor ) {
+                        if ( array_key_exists( $ancestor, $out ) ) {
+                            unset( $out[ $ancestor ] );
+                        }
+                    }
+
+                    $taxAncestorsTree = $this->taxonomyAncestorsTree( $term->term_id, $productTerm );
+
+                    if($taxAncestorsTree && !is_wp_error($taxAncestorsTree)){
+                        $name = $taxAncestorsTree;
+                    }else{
+                        continue;
+                    }
+                } else {
+                    $name = rtrim( ltrim( $term->name ) );
+                }
+
+                $occurredTaxIds = array_merge( $occurredTaxIds, get_ancestors( $term->term_id, $productTerm ) );
+
+                $out[ $term->term_id ] = $name;
             }
         }
 
-        return implode( ' - ', array_unique( $out ) );
+        return implode( ' - ', $out );
+    }
+
+    /**
+     * @param        $taxId
+     * @param        $taxonomy
+     * @param string $separator
+     * @param array  $visited
+     *
+     * @return array|null|object|string|\WP_Error
+     * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+     * @since  151127
+     */
+    function taxonomyAncestorsTree( $taxId, $taxonomy, $separator = ' > ', $visited = array() ) {
+        $chain  = '';
+        $parent = get_term( $taxId, $taxonomy );
+        if ( is_wp_error( $parent ) ) {
+            return $parent;
+        }
+
+        $name = $parent->name;
+
+        if ( $parent->parent && ( $parent->parent != $parent->term_id ) && ! in_array( $parent->parent, $visited ) ) {
+            $visited[] = $parent->parent;
+            $chain .= $this->taxonomyAncestorsTree( $parent->parent, $taxonomy, $separator, $visited ) . $separator;
+        }
+
+        $chain .= $name;
+
+        return $chain;
     }
 
     /**

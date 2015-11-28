@@ -42,6 +42,8 @@ along with this program.  If not, see [http://www.gnu.org/licenses/](http://www.
 #### 151127
 
 * Tweak: Support for larger product image sizes
+* Tweak: You can now include category full path (experimental, need feedback)
+* Tweak: Better message handling during XML generation
 
 #### 150804
 
