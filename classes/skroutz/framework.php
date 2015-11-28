@@ -31,13 +31,6 @@ require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/core/stub.php';
  * @method \skroutz\skroutz      ©skroutz()
  */
 class framework extends \xd__framework {
-	static function classMemStats( $class ) {
-		$className = get_class( $class );
-		echo "<p>";
-		echo "<strong>$className:</strong> - ( " . number_format( strlen( serialize( $class ) ) / 1024, 2 ) . 'k )';
-		echo "</p>";
-	}
-
 }
 
 $GLOBALS[ __NAMESPACE__ ] = new framework(
@@ -46,7 +39,7 @@ $GLOBALS[ __NAMESPACE__ ] = new framework(
 		'plugin_var_ns'  => 'skz',
 		'plugin_cap'     => 'manage_options',
 		'plugin_name'    => 'Skroutz.gr XML Feed',
-		'plugin_version' => '150110',
+		'plugin_version' => '151127',
 		'plugin_site'    => 'https://github.com/panvagenas/skroutz-xml-feed',
 		'plugin_dir'     => dirname( dirname( dirname( __FILE__ ) ) ) // Your plugin directory.
 
