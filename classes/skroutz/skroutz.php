@@ -303,9 +303,9 @@ class skroutz extends framework {
 
                     $taxAncestorsTree = $this->taxonomyAncestorsTree( $term->term_id, $productTerm );
 
-                    if($taxAncestorsTree && !is_wp_error($taxAncestorsTree)){
+                    if ( $taxAncestorsTree && ! is_wp_error( $taxAncestorsTree ) ) {
                         $name = $taxAncestorsTree;
-                    }else{
+                    } else {
                         continue;
                     }
                 } else {
@@ -487,7 +487,8 @@ class skroutz extends framework {
 
             foreach ( $variations as $variation ) {
                 $attrName = wc_attribute_taxonomy_name( $taxonomy->attribute_name );
-                $key      = 'attribute_' . $attrName;
+                $key      = sanitize_title('attribute_' . $attrName);
+
                 if ( isset( $variation['attributes'][ $key ] ) && $variation['is_in_stock'] && $variation['is_purchasable'] ) {
                     if ( empty( $variation['attributes'][ $key ] ) ) {
                         $attr = $product->get_attribute( $attrName );
@@ -559,7 +560,8 @@ class skroutz extends framework {
             foreach ( $variations as $variation ) {
                 /** @var \WC_Product_Variation $variation */
                 $attrName = wc_attribute_taxonomy_name( $taxonomy->attribute_name );
-                $key      = 'attribute_' . $attrName;
+                $key      = sanitize_title('attribute_' . $attrName);
+
                 if ( isset( $variation['attributes'][ $key ] ) && $variation['is_in_stock'] && $variation['is_purchasable'] ) {
                     if ( empty( $variation['attributes'][ $key ] ) ) {
                         $attr = $product->get_attribute( $attrName );
