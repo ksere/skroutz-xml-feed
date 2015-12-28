@@ -296,8 +296,8 @@ class Options extends \WPluginCore002\Options\Options {
 		$fields = array();
 
 		$options = array(
-			$this->I18n->__( 'Use Product SKU' ),
-			$this->I18n->__( 'Use Product ID' )
+			'sku' => $this->I18n->__( 'Use Product SKU' ),
+			'id' => $this->I18n->__( 'Use Product ID' )
 		);
 
 		$fields[] = array(
@@ -336,8 +336,8 @@ class Options extends \WPluginCore002\Options\Options {
 		);
 
 		$options = array(
-			$this->I18n->__( 'Use Product SKU' ),
-			$this->I18n->__( 'Use Product ID' )
+			'sku' => $this->I18n->__( 'Use Product SKU' ),
+			'id' => $this->I18n->__( 'Use Product ID' )
 		);
 
 		foreach ( $attrTaxonomies as $taxonomies ) {
