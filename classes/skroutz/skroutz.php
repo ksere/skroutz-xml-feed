@@ -239,11 +239,9 @@ class skroutz extends framework {
                 $imageSize = 'full';
                 break;
         }
-        $imageLink = '';
-        if ( true || $option == 0 ) {
-            $imageLink = wp_get_attachment_image_src( $product->get_image_id(), $imageSize );
-            $imageLink = is_array( $imageLink ) ? $imageLink[0] : '';
-        }
+
+        $imageLink = wp_get_attachment_image_src( $product->get_image_id(), $imageSize );
+        $imageLink = is_array( $imageLink ) && isset($imageLink[0]) ? $imageLink[0] : '';
 
         return urldecode( $imageLink );
     }
