@@ -41,6 +41,12 @@ along with this program.  If not, see [http://www.gnu.org/licenses/](http://www.
 
 #### 151127
 
+* Added product exclusion by category
+* Tested with WordPress 4.6
+* Tested with PHP 7
+
+#### 151127
+
 * Fix: Attributes with Greek slug won't appear in XML
 * Tweak: Support for larger product image sizes
 * Tweak: You can now include category full path (experimental, need feedback)

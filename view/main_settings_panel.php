@@ -30,6 +30,12 @@ $availOptionsDoNotInclude[] = array(
 	'label' => $this->__( 'Do not Include' ),
 	'value' => (string) count( $availOptions )
 );
+
+$productCategories = get_categories( [ 'taxonomy' => 'product_cat', 'hide_empty' => true ] );
+$categories = [];
+foreach ( $productCategories as $productCategory ) {
+	$categories[] = [ 'label' => $productCategory->name, 'value' => (string) $productCategory->term_id ];
+}
 ?>
 <div class="form-horizontal main-settings-form-wrapper" role="form">
 	<div class="form-group row">
@@ -275,6 +281,31 @@ $availOptionsDoNotInclude[] = array(
 			);
 			echo $callee->menu_page->option_form_fields->markup( $this->©option->get( 'avail_backorders' ),
 				$inputOptions );
+			?>
+		</div>
+	</div>
+
+	<div class="form-group row">
+		<label for="ex_cats"
+		       class="col-md-3 control-label"><?php echo $this->__( 'Exclude products from these categories <br>(if a product has any of these categories then it will not be included in the XML)' ); ?></label>
+
+		<div class="col-sm-7">
+			<?php
+			$inputOptions = array(
+				'type'        => 'select',
+				'multiple'    => true,
+				'name'        => '[ex_cats]',
+				'title'       => $this->__( 'Exclude products from these categories' ),
+				'placeholder' => $this->__( 'Exclude products from these categories' ),
+				'description' => $this->__( 'Exclude products from these categories' ),
+				'required'    => false,
+				'id'          => 'ex-cats',
+				'attrs'       => '',
+				'size'       => 0,
+				'classes'     => 'form-control col-md-10',
+				'options'     => $categories
+			);
+			echo $callee->menu_page->option_form_fields->markup( $this->©option->get( 'ex_cats' ), $inputOptions );
 			?>
 		</div>
 	</div>

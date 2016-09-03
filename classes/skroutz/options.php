@@ -78,6 +78,8 @@ class options extends \xd_v141226_dev\options {
              ********************/
             // Include products
             'products_include'                           => array( 'product' ),
+            // Exclude product categories
+            'ex_cats'                                    => [],
             // Availability when products in stock
             'avail_inStock'                              => 0,
             // Availability when products out stock
@@ -144,6 +146,7 @@ class options extends \xd_v141226_dev\options {
                 'string:numeric >=' => 0,
                 'string:numeric <=' => count( $this->availOptions )
             ),
+            'ex_cats'                => array( 'array' ),
             'map_id'                 => array( 'string:numeric >=' => 0 ),
             'map_name'               => array( 'string:numeric >=' => 0 ),
             'map_name_append_sku'    => array( 'string:numeric >=' => 0, 'string:numeric <=' => 1 ),

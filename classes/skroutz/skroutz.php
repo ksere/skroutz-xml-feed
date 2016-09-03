@@ -664,6 +664,8 @@ class skroutz extends framework {
 
         $memLimit = ( $mem - 10 ) * 1024 * 1024;
 
+        $exCategories = $this->©option->get('ex_cats');
+
         foreach ( $prodArray as $i => $pid ) {
 
             if ( memory_get_usage() > $memLimit ) {
@@ -702,6 +704,20 @@ class skroutz extends framework {
                 );
                 continue;
             }
+
+            // check if product is an excluded category
+            if ( $exCategories ) {
+                $pCats = get_the_terms( $product->id, 'product_cat' );
+                if ( $pCats ) {
+                    $pCats = wp_list_pluck( $pCats, 'term_id' );
+                    foreach ( $pCats as $pCat ) {
+                        if ( in_array( $pCat, $exCategories ) ) {
+                            continue 2;
+                        }
+                    }
+                }
+            }
+
 
             $this->©xml->appendProduct( $this->getProductArray( $product ) );
         }
