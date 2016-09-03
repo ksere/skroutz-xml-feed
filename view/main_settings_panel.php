@@ -31,10 +31,16 @@ $availOptionsDoNotInclude[] = array(
 	'value' => (string) count( $availOptions )
 );
 
-$productCategories = get_categories( [ 'taxonomy' => 'product_cat', 'hide_empty' => true ] );
+$productCategories = get_categories( [ 'taxonomy' => 'product_cat', 'hide_empty' => 0 ] );
 $categories = [];
 foreach ( $productCategories as $productCategory ) {
 	$categories[] = [ 'label' => $productCategory->name, 'value' => (string) $productCategory->term_id ];
+}
+
+$productTags = get_terms( ['taxonomy' => 'product_tag', 'hide_empty' => 0] );
+$tags = [];
+foreach ( $productTags as $productTag ) {
+	$tags[] = [ 'label' => $productTag->name, 'value' => (string) $productTag->term_id ];
 }
 ?>
 <div class="form-horizontal main-settings-form-wrapper" role="form">
@@ -285,28 +291,64 @@ foreach ( $productCategories as $productCategory ) {
 		</div>
 	</div>
 
-	<div class="form-group row">
-		<label for="ex_cats"
-		       class="col-md-3 control-label"><?php echo $this->__( 'Exclude products from these categories <br>(if a product has any of these categories then it will not be included in the XML)' ); ?></label>
+	<?php
+	if($categories){
+		?>
+		<div class="form-group row">
+			<label for="ex-cats"
+			       class="col-md-3 control-label"><?php echo $this->__( 'Exclude products from certain categories <br>(if a product has any of these categories then it will not be included in the XML)' ); ?></label>
 
-		<div class="col-sm-7">
-			<?php
-			$inputOptions = array(
-				'type'        => 'select',
-				'multiple'    => true,
-				'name'        => '[ex_cats]',
-				'title'       => $this->__( 'Exclude products from these categories' ),
-				'placeholder' => $this->__( 'Exclude products from these categories' ),
-				'description' => $this->__( 'Exclude products from these categories' ),
-				'required'    => false,
-				'id'          => 'ex-cats',
-				'attrs'       => '',
-				'size'       => 0,
-				'classes'     => 'form-control col-md-10',
-				'options'     => $categories
-			);
-			echo $callee->menu_page->option_form_fields->markup( $this->©option->get( 'ex_cats' ), $inputOptions );
-			?>
+			<div class="col-sm-7">
+				<?php
+				$inputOptions = array(
+					'type'        => 'select',
+					'multiple'    => true,
+					'name'        => '[ex_cats]',
+					'title'       => $this->__( 'Exclude products from these categories' ),
+					'placeholder' => $this->__( 'Exclude products from these categories' ),
+					'required'    => false,
+					'id'          => 'ex-cats',
+					'attrs'       => '',
+					'size'       => 0,
+					'classes'     => 'form-control col-md-10',
+					'options'     => $categories
+				);
+				echo $callee->menu_page->option_form_fields->markup( $this->©option->get( 'ex_cats' ), $inputOptions );
+				?>
+			</div>
 		</div>
-	</div>
+	<?php
+	}
+	?>
+
+	<?php
+	if($tags){
+		?>
+		<div class="form-group row">
+			<label for="ex-tags"
+			       class="col-md-3 control-label"><?php echo $this->__( 'Exclude products from certain tags <br>(if a product has any of these tags then it will not be included in the XML)' ); ?></label>
+
+			<div class="col-sm-7">
+				<?php
+				$inputOptions = array(
+					'type'        => 'select',
+					'multiple'    => true,
+					'name'        => '[ex_tags]',
+					'title'       => $this->__( 'Exclude products from these tags' ),
+					'placeholder' => $this->__( 'Exclude products from these tags' ),
+					'required'    => false,
+					'id'          => 'ex-tags',
+					'attrs'       => '',
+					'size'       => 0,
+					'classes'     => 'form-control col-md-10',
+					'options'     => $tags
+				);
+				echo $callee->menu_page->option_form_fields->markup( $this->©option->get( 'ex_tags' ), $inputOptions );
+				?>
+			</div>
+		</div>
+	<?php
+	}
+	?>
+
 </div>

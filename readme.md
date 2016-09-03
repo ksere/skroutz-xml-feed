@@ -42,7 +42,9 @@ along with this program.  If not, see [http://www.gnu.org/licenses/](http://www.
 #### 151127
 
 * Added product exclusion by category
+* Added product exclusion by tag
 * Tested with WordPress 4.6
+* Tested with WooCommerce 2.6
 * Tested with PHP 7
 
 #### 151127

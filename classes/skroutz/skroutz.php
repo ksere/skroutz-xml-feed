@@ -665,6 +665,7 @@ class skroutz extends framework {
         $memLimit = ( $mem - 10 ) * 1024 * 1024;
 
         $exCategories = $this->©option->get('ex_cats');
+        $exTags = $this->©option->get('ex_tags');
 
         foreach ( $prodArray as $i => $pid ) {
 
@@ -712,6 +713,19 @@ class skroutz extends framework {
                     $pCats = wp_list_pluck( $pCats, 'term_id' );
                     foreach ( $pCats as $pCat ) {
                         if ( in_array( $pCat, $exCategories ) ) {
+                            continue 2;
+                        }
+                    }
+                }
+            }
+
+            // check if product has an excluded tag
+            if ( $exTags ) {
+                $pTags = get_the_terms( $product->id, 'product_tag' );
+                if ( $pTags ) {
+                    $pTags = wp_list_pluck( $pTags, 'term_id' );
+                    foreach ( $pTags as $pTag ) {
+                        if ( in_array( $pTag, $exTags ) ) {
                             continue 2;
                         }
                     }

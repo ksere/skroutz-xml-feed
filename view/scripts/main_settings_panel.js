@@ -1383,6 +1383,7 @@
 jQuery( 'document' ).ready(
     function ( $ ) {
         $( "#ex-cats" ).chosen();
+        $( "#ex-tags" ).chosen();
     }
 );
 
