@@ -39,7 +39,7 @@ along with this program.  If not, see [http://www.gnu.org/licenses/](http://www.
 
 ## Changelog
 
-#### 151127
+#### 160904
 
 * Added product exclusion by category
 * Added product exclusion by tag
