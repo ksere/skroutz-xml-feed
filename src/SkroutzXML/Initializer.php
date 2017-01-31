@@ -23,7 +23,7 @@ class Initializer {
 
         add_action( 'wp_ajax_skz-gen-now-action', [ new Ajax(), 'generateNow' ] );
 
-        add_action( 'wp_dashboard_setup', [ $this, 'addDashboardWidget' ] );
+//        add_action( 'wp_dashboard_setup', [ $this, 'addDashboardWidget' ] );
 
         add_action('admin_menu', [$this->options, 'addMenuPages']);
 
@@ -101,12 +101,8 @@ class Initializer {
         wp_add_dashboard_widget(
             'skz-xml-info',
             'Skroutz XML',
-            [ $this, 'dashboardWidgetMarkUp' ]
+            function(){}
         );
-    }
-
-    public function dashboardWidgetMarkUp() {
-        echo __METHOD__;
     }
 
     public function actionAdminEnqueueScripts($hook_suffix) {
@@ -117,9 +113,26 @@ class Initializer {
             wp_enqueue_script( 'postbox' );
 
             wp_enqueue_script(
+                'skz_vendor_js',
+                plugins_url( 'assets/js/vendor.min.js', $this->pluginFile ),
+                [ 'jquery' ],
+                false,
+                true
+            );
+
+            wp_localize_script('skz__js', 'SKZ', ['pageHookSuffix' => $this->options->getPageHookSuffix()]);
+
+            wp_enqueue_style(
+                'skz_vendor_css',
+                plugins_url( 'assets/css/vendor.min.css', $this->pluginFile ),
+                [],
+                true
+            );
+
+            wp_enqueue_script(
                 'skz__js',
                 plugins_url( 'assets/js/scripts.min.js', $this->pluginFile ),
-                [ 'jquery' ],
+                [ 'jquery', 'skz_vendor_js' ],
                 false,
                 true
             );
@@ -173,42 +186,5 @@ class Initializer {
         delete_option( Skroutz::DB_LOG_NAME );
 
         return true;
-    }
-
-
-    public static function getFileInfoMarkUp() {
-        $skz      = new Skroutz();
-        $fileInfo = $skz->getXmlObj()->getFileInfo();
-
-        $genUrl = Options::getInstance()->getGenerateXmlUrl();
-
-        $content = '<div class="row">';
-        if ( empty( $fileInfo ) ) {
-            $content .= '<p class="alert alert-danger">
-                        File not generated yet. Please use the <i>Generate XML Now</i>
-                        button to generate a new XML file</p>';
-        } else {
-            $content .= '<ul class="list-group">';
-            foreach ( $fileInfo as $item ) {
-                $content .= '<li class="list-group-item">';
-                $content .= $item['label'] . ': <strong>' . $item['value'] . '</strong>';
-                $content .= '</li>';
-            }
-            $content .= '</ul>';
-
-            $content .= '<a class="btn btn-primary btn-sm" href="'
-                        . home_url( Options::getInstance()->getXmlRelLocationOption() )
-                        . '" target="_blank" role="button">';
-            $content .= 'Open Cached File';
-            $content .= '</a>';
-            $content .= '<a class="btn btn-primary btn-sm copy-gen-url pull-right" href="'
-                        . $genUrl
-                        . '" target="_blank" role="button">';
-            $content .= 'Open Generate URL';
-            $content .= '</a>';
-        }
-        $content .= '</div>';
-
-        return $content;
     }
 }
