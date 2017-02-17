@@ -47,6 +47,10 @@ class Initializer {
     public function addMetaboxesHook() {
         $page_hook_id = $this->options->getPageHookSuffix();
 
+        if(!$page_hook_id){
+            return;
+        }
+
         add_meta_box(
             'save_box',
             'Save Options',
@@ -108,7 +112,7 @@ class Initializer {
 
     public function actionAdminEnqueueScripts( $hook_suffix ) {
         $page_hook_id = $this->options->getPageHookSuffix();
-        if ( $hook_suffix == $page_hook_id ) {
+        if ( $page_hook_id && $hook_suffix == $page_hook_id ) {
             wp_enqueue_script( 'common' );
             wp_enqueue_script( 'wp-lists' );
             wp_enqueue_script( 'postbox' );
@@ -121,7 +125,7 @@ class Initializer {
                 true
             );
 
-            wp_localize_script('skz__js', 'SKZ', ['pageHookSuffix' => $this->options->getPageHookSuffix()]);
+            wp_localize_script('skz__js', 'SKZ', ['pageHookSuffix' => $page_hook_id]);
 
             wp_enqueue_style(
                 'skz_vendor_css',
@@ -138,7 +142,7 @@ class Initializer {
                 true
             );
 
-            wp_localize_script( 'skz__js', 'SKZ', [ 'pageHookSuffix' => $this->options->getPageHookSuffix() ] );
+            wp_localize_script( 'skz__js', 'SKZ', [ 'pageHookSuffix' => $page_hook_id ] );
 
             wp_enqueue_style(
                 'skz_gen_now_css',
