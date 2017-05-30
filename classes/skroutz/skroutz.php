@@ -73,7 +73,7 @@ class skroutz extends framework {
         $out['availability']   = $this->getAvailabilityString( $product );
         $out['manufacturer']   = $this->getProductManufacturer( $product );
 
-        if ( $product->product_type == 'variable' && (bool) $this->©option->get( 'is_fashion_store' ) ) {
+        if ( $product->get_type() == 'variable' && (bool) $this->©option->get( 'is_fashion_store' ) ) {
             $product = new \WC_Product_Variable( $product );
 
             $colors = $this->getProductColors( $product );
@@ -93,7 +93,7 @@ class skroutz extends framework {
             }
         }
 
-        return $out;
+        return apply_filters( 'skroutz_product_array', $out, $product );
     }
 
     /**
@@ -109,7 +109,7 @@ class skroutz extends framework {
         if ( $option == 0 ) {
             return $product->get_sku();
         } else {
-            return $product->id;
+            return $product->get_id();
         }
     }
 
@@ -281,7 +281,7 @@ class skroutz extends framework {
      * @since    141015
      */
     protected function getFormatedTextFromTerms( \WC_Product &$product, $productTerm, $includeParents = false ) {
-        $terms = get_the_terms( $product->id, $productTerm );
+        $terms = get_the_terms( $product->get_id(), $productTerm );
         $out   = array();
 
         if ( is_array( $terms ) ) {
@@ -398,7 +398,7 @@ class skroutz extends framework {
      * @since  141015
      */
     protected function getAvailabilityString( \WC_Product &$product ) {
-        $stockStatusInStock = $product->stock_status === 'instock';
+        $stockStatusInStock = $product->get_stock_status() === 'instock';
         $manageStock        = $product->managing_stock();
         $backOrdersAllowed  = $product->backorders_allowed();
         $hasQuantity        = $product->get_stock_quantity() > 0;
@@ -692,7 +692,7 @@ class skroutz extends framework {
                 $this->©message->forceDBLog(
                     'product',
                     array(
-                        'id'             => $product->id,
+                        'id'             => $product->get_id(),
                         'SKU'            => $product->get_sku(),
                         'is_purchasable' => $product->is_purchasable(),
                         'is_visible'     => $product->is_visible(),
@@ -706,7 +706,7 @@ class skroutz extends framework {
 
             // check if product is an excluded category
             if ( $exCategories ) {
-                $pCats = get_the_terms( $product->id, 'product_cat' );
+                $pCats = get_the_terms( $product->get_id(), 'product_cat' );
                 if ( $pCats ) {
                     $pCats = wp_list_pluck( $pCats, 'term_id' );
                     foreach ( $pCats as $pCat ) {
@@ -719,7 +719,7 @@ class skroutz extends framework {
 
             // check if product has an excluded tag
             if ( $exTags ) {
-                $pTags = get_the_terms( $product->id, 'product_tag' );
+                $pTags = get_the_terms( $product->get_id(), 'product_tag' );
                 if ( $pTags ) {
                     $pTags = wp_list_pluck( $pTags, 'term_id' );
                     foreach ( $pTags as $pTag ) {
